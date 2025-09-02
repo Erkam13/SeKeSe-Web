@@ -1,65 +1,44 @@
+# SKS Web
 
-# React + Vite Başlangıç Şablonu
+Üsküdar Üniversitesi Sağlık Kültür Spor (SKS) web uygulaması. Etkinlikler, kulüpler, yemek listesi, servis saatleri ve daha fazlası tek bir platformda!
 
-Bu proje, modern bir React uygulaması başlatmak için temel bir yapı sunar. Vite kullanılarak yapılandırılmıştır ve Tailwind CSS ile birlikte gelir.
+## Özellikler
 
-## 🚀 Hızlı Başlangıç
+- Etkinlik takvimi ve detayları
+- Kulüp listesi ve bilgileri
+- Güncel yemek menüsü
+- Servis/ring saatleri
+- Blog ve duyurular
+- Modern ve mobil uyumlu arayüz
 
-Projeyi bilgisayarına klonlamak ve başlatmak için aşağıdaki adımları takip edebilirsin:
+## Kurulum
 
-```bash
-npx degit ozcanzaferayan/react proje-adi
-cd proje-adi
-npm install
-npm run dev
-```
+1. Depoyu klonlayın:
+    ```bash
+    git clone https://github.com/kullaniciAdi/sksWeb.git
+    cd sksWeb
+    ```
 
-> Bu komut sayesinde Git geçmişi olmadan yalnızca proje dosyaları indirilir.
+2. Bağımlılıkları yükleyin:
+    ```bash
+    npm install
+    ```
 
-## 📁 Klasör Yapısı
+3. Geliştirme sunucusunu başlatın:
+    ```bash
+    npm run dev
+    ```
 
-```
-proje-adi/
-├── public/
-├── src/
-│   ├── assets/
-│   ├── App.tsx
-│   ├── index.css
-│   ├── main.tsx
-│   └── vite-env.d.ts
-├── .gitignore
-├── eslint.config.js
-├── index.html
-├── package.json
-├── package-lock.json
-├── README.md
-├── tsconfig.json
-├── tsconfig.app.json
-├── tsconfig.node.json
-└── vite.config.ts
-```
+## Kullanım
 
-## 🛠 Teknolojiler
+- Ana sayfa üzerinden SKS ile ilgili tüm bilgilere ulaşabilirsiniz.
+- Menüden ilgili sayfalara geçiş yapabilirsiniz.
+- Mobil cihazlarda hamburger menü ile kolay erişim.
 
-- ⚛️ React
-- ⚡ Vite
-- 🎨 Tailwind CSS
-- 🧹 ESLint
-- 🟦 TypeScript
+## Katkı Sağlama
 
-## 🧪 Gereksinimler
+Pull request gönderebilir veya issue açabilirsiniz.
 
-- Node.js 18+
-- npm (veya yarn)
+## Lisans
 
-## 🌐 GitHub
-
-[Proje GitHub Sayfası](https://github.com/ozcanzaferayan/react)
-
-## 📄 Lisans
-
-MIT Lisansı ile lisanslanmıştır. Özgürce kullanabilir, düzenleyebilir ve paylaşabilirsiniz.
-
----
-
-Keyifli kodlamalar! 🎉
+MIT
