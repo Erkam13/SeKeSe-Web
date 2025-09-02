@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
                     <div className="leading-tight">
                         <p className="text-xs text-emerald-700 font-medium">SKS</p>
                         <p className="text-sm sm:text-base font-semibold text-slate-900">
-                            Spor Kültür Sağlık
+                            Sağlık Kültür Spor
                         </p>
                     </div>
                 </a>
