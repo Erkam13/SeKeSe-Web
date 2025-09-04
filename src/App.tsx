@@ -2,81 +2,41 @@ import React from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import DashboardMenu from "./DashboardMenu";
-import HeroSlider, { type Slide } from "./HeroSlider";
+import HeroSlider from "./HeroSlider";
 import EventCard from "./EventCard";
 import BlogCard from "./BlogCard";
 import { blogs } from "./data/blogs";
+import { slides } from "./data/slides";
+import { events } from "./data/events";
 import Stats from "./Stats";
 
 import EtkinlikTakvim from "./pages/EtkinlikTakvim";
+import EtkinlikKatilim from "./pages/EtkinlikKatilim";
+import Search from "./pages/Search";
+import Unilife from "./pages/Unilife";
+import Bloglar from "./pages/Bloglar";
 import YemekMenusu from "./pages/YemekMenusu";
-import RingSaatleri from "./pages/RingSaatleri";
 import Duyurular from "./pages/Duyurular";
 import Kulupler from "./pages/Kulupler";
+import Rings from "./pages/Rings";
+import BlogDetail from "./pages/BlogDetail";
 
 
-// Slider görselleri public/banners altında ise:
-const slides: Slide[] = [
-  {
-    id: "the-2025",
-    image: "/banners/the-impact.jpg",
-    title: "17 SDG etiketiyle Vakıf Üniversiteleri arasında\nTÜRKİYE BİRİNCİSİYİZ!",
-    subtitle: "THE Impact Rankings 2025",
-    ctaText: "Detaylı Bilgi",
-    ctaHref: "/the-impact",
-  },
-  {
-    id: "spor",
-    image: "/banners/sports.jpg",
-    title: "Spor Tesisleri ve Takımlar",
-    subtitle: "SKS • Üsküdar Üniversitesi",
-    ctaText: "Tesisleri Keşfet",
-    ctaHref: "/spor-tesisleri",
-  },
-  {
-    id: "yemek",
-    image: "/banners/food.jpg",
-    title: "Haftalık Yemek Menüsü",
-    subtitle: "Sağlıklı & Dengeli",
-    ctaText: "Menüyü Gör",
-    ctaHref: "/yemek-menusu",
-  },
-];
-
-// ---- Layout: her sayfada Navbar görünsün ----
+// Layout
 const Layout: React.FC = () => (
-  <div className="bg-gray-50 min-h-screen">
+  <div className="bg-gray-50 min-h-screen flex flex-col">
     <Navbar />
-    <Outlet />
+    <div className="flex-1">
+      <Outlet />
+    </div>
+    <Footer />
   </div>
 );
 
-// ---- Home: anasayfa içeriği ----
+// Home
 const Home: React.FC = () => {
-  const events = [
-    {
-      image: "https://picsum.photos/400/200?3",
-      title: "21. Yüzyılda Uluslararası Göç Konferansı – IX",
-      date: "13.10.2025 / Pazartesi",
-      time: "10:00 - 20:00",
-      location: "Yeditepe Üniversitesi",
-      description: "Göç üzerine uluslararası akademik konferans.",
-      type: "Yüz Yüze Etkinlik",
-    },
-    {
-      image: "https://picsum.photos/400/200?2",
-      title: "2025 Mezuniyet Törenleri",
-      date: "02.07.2025 / Çarşamba",
-      time: "10:00 - 17:00",
-      location: "Üsküdar Üniversitesi",
-      description: "Üsküdar Üniversitesi mezuniyet törenleri.",
-      type: "Yüz Yüze Etkinlik",
-    },
-  ];
-
-
-
   return (
     <div className="space-y-12">
       <section>
@@ -88,30 +48,39 @@ const Home: React.FC = () => {
 
       <DashboardMenu />
 
-      <section>
-        <h2 className="text-2xl font-bold px-6 pt-6">Etkinlikler</h2>
-        <div className="justify-center flex flex-wrap gap-6 p-6">
-          {events.map((event, index) => (
-            <EventCard key={index} {...event} />
+      <section className="bg-gray-50/60">
+        <div className="mx-auto max-w-7xl px-6 pt-10">
+          <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+            Etkinlikler
+          </h2>
+        </div>
+        <div className="mx-auto max-w-7xl px-6 pb-10 pt-6 grid gap-8 lg:gap-10 justify-items-center
+                grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {events.map((e, i) => (
+            <EventCard key={i} {...e} />
           ))}
         </div>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-bold px-6">Blog Yazıları</h2>
-        <div className="flex justify-center gap-6 p-6 flex-wrap">
-          {blogs.map((blog, index) => (
-            <div key={index} className="w-80">
-              <BlogCard {...blog} />
-            </div>
+      <section className="bg-gray-50/60">
+        <div className="mx-auto max-w-7xl px-6 pt-10">
+          <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+            Blog Yazıları
+          </h2>
+        </div>
+        <div className="mx-auto max-w-7xl px-6 pb-10 pt-6 grid gap-8 lg:gap-10 justify-items-center
+               grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {blogs.map((blog, i) => (
+            <BlogCard key={i} {...blog} />
           ))}
         </div>
+
       </section>
     </div>
   );
 };
 
-// ---- Router ----
+// Router
 const App: React.FC = () => {
   return (
     <Routes>
@@ -119,9 +88,14 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/etkinlik-takvim" element={<EtkinlikTakvim />} />
         <Route path="/yemek-menusu" element={<YemekMenusu />} />
-        <Route path="/ring-saatleri" element={<RingSaatleri />} />
+        <Route path="/ring-saatleri" element={<Rings />} />
         <Route path="/duyurular" element={<Duyurular />} />
         <Route path="/kulupler" element={<Kulupler />} />
+        <Route path="/blog" element={<Bloglar />} />
+        <Route path="/unilife" element={<Unilife />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/blog/:slug" element={<BlogDetail />} />
+        <Route path="/etkinlik-katilim" element={<EtkinlikKatilim />} />
         <Route path="*" element={<div className="p-6">Sayfa bulunamadı</div>} />
       </Route>
     </Routes>

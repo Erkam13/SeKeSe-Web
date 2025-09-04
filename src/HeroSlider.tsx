@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type Slide = {
     id: string;
@@ -89,14 +90,14 @@ const HeroSlider: React.FC<Props> = ({
                 aria-label="Önceki"
                 className="absolute left-3 top-1/2 -translate-y-1/2 grid place-items-center h-11 w-11 rounded-full bg-white/90 shadow hover:bg-white"
             >
-                ‹
+                <ChevronLeft className="h-5 w-5" />
             </button>
             <button
                 onClick={scrollNext}
                 aria-label="Sonraki"
                 className="absolute right-3 top-1/2 -translate-y-1/2 grid place-items-center h-11 w-11 rounded-full bg-white/90 shadow hover:bg-white"
             >
-                ›
+                <ChevronRight className="h-5 w-5" />
             </button>
 
             {/* dots */}
@@ -110,18 +111,28 @@ export default HeroSlider;
 /* ---- Dots subcomponent ---- */
 type DotsProps = { slides: number; emblaApi: ReturnType<typeof useEmblaCarousel>[1] };
 const Dots: React.FC<DotsProps> = ({ slides, emblaApi }) => {
-    const [, setIndex] = React.useState(0);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+
     React.useEffect(() => {
         if (!emblaApi) return;
-        const onSelect = () => setIndex(emblaApi.selectedScrollSnap());
+        const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
         emblaApi.on("select", onSelect);
         onSelect();
+        return () => {
+            emblaApi.off("select", onSelect);
+        };
     }, [emblaApi]);
 
     return (
         <div className="mt-3 flex justify-center gap-2">
             {Array.from({ length: slides }).map((_, i) => (
-                <span key={i} className="h-2 w-2 rounded-full bg-slate-300 inline-block" />
+                <button
+                    key={i}
+                    className={`h-2 w-2 rounded-full inline-block transition-colors duration-200 ${selectedIndex === i ? "bg-yellow-500" : "bg-slate-300"}`}
+                    aria-label={`Slide ${i + 1}`}
+                    type="button"
+                    onClick={() => emblaApi && emblaApi.scrollTo(i)}
+                />
             ))}
         </div>
     );

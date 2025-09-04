@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
     Users2,
     Calendar,
@@ -7,6 +8,8 @@ import {
     ChevronLeft,
     ChevronRight,
     Search,
+    FileText,
+    FileDown
 } from "lucide-react";
 
 /* ===================== Types ===================== */
@@ -84,6 +87,18 @@ function initials(name: string) {
         .join("")
         .toUpperCase();
 }
+
+const forms: { id: string; title: string; href: string }[] = [
+    { id: "f1", title: "Etkinlik Talep Formu", href: "/forms/etkinlik-talep-formu.pdf" },
+    { id: "f2", title: "Salon / Mekân Tahsis Formu", href: "/forms/mekan-tahsis-formu.pdf" },
+    { id: "f3", title: "Kulüp Kurulum Başvuru Formu", href: "/forms/kulup-kurulum-basvuru.pdf" },
+    { id: "f4", title: "Kulüp Danışmanı Onay Formu", href: "/forms/danisman-onay-formu.pdf" },
+    { id: "f5", title: "Afiş / Duyuru Onay Formu", href: "/forms/afis-duyuru-onay.pdf" },
+    { id: "f6", title: "Teknik Ekipman Talep Formu", href: "/forms/teknik-ekipman-talep.pdf" },
+    { id: "f7", title: "Seyahat / Ulaşım Talep Formu", href: "/forms/ulasim-talep.pdf" },
+    { id: "f8", title: "Bütçe / Destek Talep Formu", href: "/forms/butce-destek-talep.pdf" },
+    { id: "f9", title: "Etkinlik Sonuç Raporu", href: "/forms/etkinlik-sonuc-raporu.pdf" },
+];
 
 /* ===================== Component ===================== */
 const Kulupler: React.FC = () => {
@@ -185,18 +200,19 @@ const Kulupler: React.FC = () => {
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
-                            Öğrenci Kulüpleri
+                            Kulüpler &amp; Destek
                         </h1>
                         <p className="text-slate-500 text-sm -mt-0.5">Filtrele, sırala ve keşfet</p>
                     </div>
 
-                    <button
-                        onClick={addRandom}
-                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700 transition shadow"
-                        title="Örnek kulüp ekle"
-                    >
-                        <Plus className="h-4 w-4" /> Örnek Ekle
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700 transition shadow"
+                            title="Örnek kulüp ekle"
+                        >
+                            <Plus className="h-4 w-4" /> Örnek Ekle
+                        </button>
+                    </div>
                 </div>
 
                 {/* Controls */}
@@ -413,6 +429,41 @@ const Kulupler: React.FC = () => {
                     <ChevronRight className="h-4 w-4" />
                 </button>
             </div>
+
+            {/* Hızlı Formlar */}
+            <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 md:p-5">
+                <div className="mb-3 flex items-center justify-between">
+                    <h2 className="text-lg md:text-xl font-extrabold tracking-tight text-slate-900">
+                        Hızlı Formlar
+                    </h2>
+                    <Link
+                        to="/formlar"
+                        className="text-sm font-semibold text-emerald-700 hover:underline inline-flex items-center gap-1"
+                        title="Tüm formları görüntüle"
+                    >
+                        Tümünü Gör
+                        <ChevronRight className="h-4 w-4" />
+                    </Link>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {forms.map((f) => (
+                        <a
+                            key={f.id}
+                            href={f.href}
+                            download
+                            className="group flex items-center justify-between rounded-xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 px-3 py-3 hover:shadow transition"
+                            title="İndir"
+                        >
+                            <div className="flex items-center gap-2 min-w-0">
+                                <FileText className="h-4 w-4 text-emerald-700 flex-shrink-0" />
+                                <span className="truncate font-semibold text-slate-800">{f.title}</span>
+                            </div>
+                            <FileDown className="h-4 w-4 text-slate-400 group-hover:text-emerald-700" />
+                        </a>
+                    ))}
+                </div>
+            </section>
         </div>
     );
 };

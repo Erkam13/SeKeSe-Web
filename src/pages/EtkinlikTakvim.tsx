@@ -1,4 +1,5 @@
 import React from "react";
+import AddEventModal from "../AddEventModal";
 
 /* ---------- Tipler ---------- */
 type EventType = "Seminer" | "Konferans" | "Tiyatro" | "Kulüp Etkinliği" | "Spor";
@@ -6,8 +7,9 @@ type EventType = "Seminer" | "Konferans" | "Tiyatro" | "Kulüp Etkinliği" | "Sp
 type CalendarEvent = {
     id: string;
     title: string;
-    date: string;           // ISO: "2025-10-07"
+    date: string;   // ISO: "2025-10-07"
     type: EventType;
+    time?: string;  // "14:00" gibi - opsiyonel
 };
 
 type DayCell = {
@@ -24,7 +26,7 @@ const TYPE_STYLES: Record<EventType, string> = {
     Spor: "bg-cyan-100 text-cyan-800 ring-1 ring-cyan-200",
 };
 
-// legend noktaları için daha belirgin renk (küçük daire)
+// legend noktaları
 const TYPE_DOT: Record<EventType, string> = {
     Seminer: "bg-yellow-400",
     Konferans: "bg-rose-400",
@@ -38,6 +40,16 @@ const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
 
 function toISO(d: Date) {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+function normalizeDate(input: string | Date): string {
+    if (input instanceof Date) return toISO(input);
+    // accept values like "2025-10-02" or "2025-10-02T00:00" and similar
+    const match = typeof input === 'string' ? input.match(/^\d{4}-\d{2}-\d{2}/) : null;
+    if (match && match[0]) return match[0];
+    // fallback: try to construct a Date and convert
+    const d = new Date(input as any);
+    return toISO(d);
 }
 
 // Haftanın ilk günü: Pazartesi
@@ -66,37 +78,43 @@ const WEEKDAY_TR = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 
 /* ---------- Örnek veri (demo) ---------- */
 const SAMPLE_EVENTS: CalendarEvent[] = [
-    { id: "1", title: "Örnek Etkinlik", date: "2025-10-02", type: "Kulüp Etkinliği" },
-    { id: "2", title: "Örnek Etkinlik", date: "2025-10-04", type: "Konferans" },
-    { id: "3", title: "Örnek Etkinlik", date: "2025-10-05", type: "Spor" },
-    { id: "4", title: "Örnek Etkinlik", date: "2025-10-07", type: "Tiyatro" },
-    { id: "5", title: "Örnek Etkinlik", date: "2025-10-07", type: "Kulüp Etkinliği" },
-    { id: "6", title: "Örnek Etkinlik", date: "2025-10-09", type: "Kulüp Etkinliği" },
-    { id: "7", title: "Örnek Etkinlik", date: "2025-10-11", type: "Konferans" },
-    { id: "8", title: "Örnek Etkinlik", date: "2025-10-12", type: "Seminer" },
-    { id: "9", title: "Örnek Etkinlik", date: "2025-10-14", type: "Tiyatro" },
-    { id: "10", title: "Örnek Etkinlik", date: "2025-10-15", type: "Konferans" },
-    { id: "11", title: "Örnek Etkinlik", date: "2025-10-16", type: "Konferans" },
-    { id: "12", title: "Örnek Etkinlik", date: "2025-10-16", type: "Seminer" },
-    { id: "13", title: "Örnek Etkinlik", date: "2025-10-18", type: "Seminer" },
-    { id: "14", title: "Örnek Etkinlik", date: "2025-10-19", type: "Kulüp Etkinliği" },
-    { id: "15", title: "Örnek Etkinlik", date: "2025-10-22", type: "Konferans" },
-    { id: "16", title: "Örnek Etkinlik", date: "2025-10-22", type: "Tiyatro" },
-    { id: "17", title: "Örnek Etkinlik", date: "2025-10-23", type: "Tiyatro" },
-    { id: "18", title: "Örnek Etkinlik", date: "2025-10-23", type: "Seminer" },
-    { id: "19", title: "Örnek Etkinlik", date: "2025-10-24", type: "Seminer" },
-    { id: "20", title: "Örnek Etkinlik", date: "2025-10-25", type: "Konferans" },
+    { id: "1", title: "Sürdürülebilirlik ve İklim Paneli", date: "2025-09-02", type: "Kulüp Etkinliği" },
+    { id: "2", title: "Yapay Zeka Konferansı", date: "2025-09-04", type: "Konferans" },
+    { id: "3", title: "Spor Festivali", date: "2025-09-05", type: "Spor" },
+    { id: "4", title: "Sabır Taşı Tiyatro Gösterimi", date: "2025-09-07", type: "Tiyatro" },
+    { id: "5", title: "Tebessüm Kulübü Tanışma Toplantısı", date: "2025-09-07", type: "Kulüp Etkinliği" },
+    { id: "6", title: "Robotik Çalıştayı", date: "2025-09-09", type: "Kulüp Etkinliği" },
+    { id: "7", title: "Uluslararası Öğrenciler Buluşması", date: "2025-09-11", type: "Konferans" },
+    { id: "8", title: "Psikoloji Semineri", date: "2025-09-12", type: "Seminer" },
+    { id: "9", title: "Sinema Kulübü Gösterimi", date: "2025-09-14", type: "Tiyatro" },
+    { id: "10", title: "Girişimcilik Zirvesi", date: "2025-09-15", type: "Konferans" },
+    { id: "11", title: "Akademik Yayın Çalıştayı", date: "2025-09-16", type: "Konferans" },
+    { id: "12", title: "Sağlık Bilimleri Söyleşisi", date: "2025-09-16", type: "Seminer" },
+    { id: "13", title: "Kültür ve Sanat Festivali", date: "2025-09-18", type: "Seminer" },
+    { id: "14", title: "Çevre Kulübü Etkinliği", date: "2025-09-19", type: "Kulüp Etkinliği" },
+    { id: "15", title: "Mühendislik Kariyer Günü", date: "2025-09-22", type: "Konferans" },
+    { id: "16", title: "Tiyatro Atölyesi", date: "2025-09-22", type: "Tiyatro" },
+    { id: "17", title: "Dans Gösterisi", date: "2025-09-23", type: "Tiyatro" },
+    { id: "18", title: "İnovasyon Semineri", date: "2025-09-23", type: "Seminer" },
+    { id: "19", title: "Veri Bilimi Workshop", date: "2025-09-24", type: "Seminer" },
+    { id: "20", title: "Uluslararası Konferans", date: "2025-09-25", type: "Konferans" },
 ];
 
 /* ---------- Bileşen ---------- */
 const EtkinlikTakvim: React.FC = () => {
-    const [cursor, setCursor] = React.useState(() => new Date(2025, 9, 1)); // Ekim 2025
+    const [cursor, setCursor] = React.useState(() => {
+        const t = new Date();
+        return new Date(t.getFullYear(), t.getMonth(), 1);
+    });
     const [events, setEvents] = React.useState<CalendarEvent[]>(SAMPLE_EVENTS);
 
     // Drawer (detay)
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [drawerDate, setDrawerDate] = React.useState<Date | null>(null);
     const [drawerList, setDrawerList] = React.useState<CalendarEvent[]>([]);
+
+    // Modal
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
 
     const grid = React.useMemo(
         () => getMonthGrid(cursor.getFullYear(), cursor.getMonth()),
@@ -121,23 +139,23 @@ const EtkinlikTakvim: React.FC = () => {
         setCursor(new Date(t.getFullYear(), t.getMonth(), 1));
     };
 
-    const addDummy = () => {
-        const day = new Date(
-            cursor.getFullYear(),
-            cursor.getMonth(),
-            1 + Math.floor(Math.random() * 27)
-        );
-        const types: EventType[] = ["Seminer", "Konferans", "Tiyatro", "Kulüp Etkinliği", "Spor"];
-        const type = types[Math.floor(Math.random() * types.length)];
-        setEvents((prev) => [
-            ...prev,
-            {
-                id: crypto.randomUUID(),
-                title: "Yeni Etkinlik",
-                date: toISO(day),
-                type,
-            },
-        ]);
+
+    // Modal'dan gelen veriyi ekle
+    const addEventManual = (data: { title: string; date: string | Date; time: string; type: string }) => {
+        const iso = normalizeDate(data.date);
+        const t = (data.type as EventType) || "Seminer";
+        const newEvent: CalendarEvent = {
+            id: crypto.randomUUID(),
+            title: data.title?.trim() || "Yeni Etkinlik",
+            date: iso,
+            type: t,
+            time: data.time || undefined,
+        };
+
+        setEvents((prev) => [...prev, newEvent]);
+        // kullanıcı eklediği ayı hemen görsün
+        setCursor(new Date(iso));
+        setIsModalOpen(false);
     };
 
     function openDrawer(date: Date, list: CalendarEvent[]) {
@@ -174,11 +192,13 @@ const EtkinlikTakvim: React.FC = () => {
                     >
                         ›
                     </button>
+
+                    {/* Etkinlik ekleme */}
                     <button
-                        onClick={addDummy}
+                        onClick={() => setIsModalOpen(true)}
                         className="ml-2 h-9 px-3 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700"
                     >
-                        Örnek Ekle
+                        Etkinlik Ekle
                     </button>
                 </div>
             </div>
@@ -226,11 +246,14 @@ const EtkinlikTakvim: React.FC = () => {
                                     <button
                                         key={e.id}
                                         onClick={() => openDrawer(cell.date, dayEvents)}
-                                        title={`${e.title} • ${e.type}`}
+                                        title={`${e.title} • ${e.type}${e.time ? " • " + e.time : ""}`}
                                         className={`w-full text-left flex items-center gap-2 rounded-full px-2 py-1 text-xs truncate ${TYPE_STYLES[e.type]}`}
                                     >
                                         <span className="h-2 w-2 rounded-full bg-current/70 opacity-70" />
-                                        <span className="truncate">{e.title}</span>
+                                        <span className="truncate">
+                                            {e.time ? `${e.time} • ` : ""}
+                                            {e.title}
+                                        </span>
                                     </button>
                                 ))}
                                 {dayEvents.length > 3 && (
@@ -289,12 +312,20 @@ const EtkinlikTakvim: React.FC = () => {
                                 </span>
                                 <div>
                                     <div className="font-semibold">{ev.title}</div>
+                                    {ev.time && <div className="text-slate-500">{ev.time}</div>}
                                 </div>
                             </div>
                         ))}
                     </div>
                 </aside>
             )}
+
+            {/* Etkinlik Ekle Modal */}
+            <AddEventModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSave={addEventManual}
+            />
         </div>
     );
 };
