@@ -37,7 +37,6 @@ const haberler: Haber[] = [
     },
     {
         image: haber4,
-
         title: "Öğrenci Kulüpleri Stand Açma Duyurusu",
         summary: "Tanıtım ve üye alım faaliyetleri için stand süreci başladı.",
         date: "26 Ağu 2025",

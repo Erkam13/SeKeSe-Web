@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import events from "../data/events";
+import { Calendar, Clock, MapPin } from "lucide-react";
 
 type FormData = {
     fullName: string;
@@ -42,14 +43,17 @@ const EtkinlikKatilim: React.FC = () => {
     }, [sent, navigate]);
 
     React.useEffect(() => {
-        const fromState = (location.state as any)?.eventId as string | undefined;
+        const fromStateEventId = (location.state as any)?.eventId as string | undefined;
+        const fromStateEventObjId = (location.state as any)?.event?.id as string | undefined;
         const fromQuery = searchParams.get("eventId") || undefined;
-        const incoming = fromState || fromQuery;
+        const incoming = fromStateEventObjId || fromStateEventId || fromQuery;
         if (incoming && !data.eventId) {
             set("eventId", incoming as any);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.state, searchParams]);
+
+    const selectedEvent = React.useMemo(() => events.find(e => e.id === data.eventId) || null, [data.eventId]);
 
     const set = <K extends keyof FormData>(k: K, v: FormData[K]) =>
         setData((s) => ({ ...s, [k]: v }));
@@ -97,12 +101,12 @@ const EtkinlikKatilim: React.FC = () => {
 
                 {/* durum mesajı */}
                 {sent === "ok" && (
-                    <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800">
+                    <div role="status" aria-live="polite" className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800">
                         Başvurunuz alınmıştır. 5 saniye içinde ana sayfaya yönlendirileceksiniz.
                     </div>
                 )}
                 {sent === "fail" && (
-                    <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800">
+                    <div role="status" aria-live="polite" className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800">
                         Bir sorun oluştu. Lütfen tekrar deneyin.
                     </div>
                 )}
@@ -115,6 +119,7 @@ const EtkinlikKatilim: React.FC = () => {
                             type="text"
                             value={data.fullName}
                             onChange={(e) => set("fullName", e.target.value)}
+                            required
                             className={`mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 ${errors.fullName ? "border-rose-300 focus:ring-rose-200" : "border-slate-300 focus:ring-emerald-200"
                                 }`}
                             placeholder="Örn: Ayşe Yılmaz"
@@ -131,6 +136,7 @@ const EtkinlikKatilim: React.FC = () => {
                                 inputMode="numeric"
                                 value={data.studentId}
                                 onChange={(e) => set("studentId", e.target.value)}
+                                required
                                 className={`mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 ${errors.studentId ? "border-rose-300 focus:ring-rose-200" : "border-slate-300 focus:ring-emerald-200"
                                     }`}
                                 placeholder="Örn: 190102345"
@@ -144,6 +150,7 @@ const EtkinlikKatilim: React.FC = () => {
                                 type="tel"
                                 value={data.phone}
                                 onChange={(e) => set("phone", e.target.value)}
+                                required
                                 className={`mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 ${errors.phone ? "border-rose-300 focus:ring-rose-200" : "border-slate-300 focus:ring-emerald-200"
                                     }`}
                                 placeholder="+90 5XX XXX XX XX"
@@ -159,6 +166,7 @@ const EtkinlikKatilim: React.FC = () => {
                             type="email"
                             value={data.email}
                             onChange={(e) => set("email", e.target.value)}
+                            required
                             className={`mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 ${errors.email ? "border-rose-300 focus:ring-rose-200" : "border-slate-300 focus:ring-emerald-200"}`}
                             placeholder="ornek@st.uskudar.edu.tr"
                         />
@@ -172,17 +180,34 @@ const EtkinlikKatilim: React.FC = () => {
                             <select
                                 value={data.eventId}
                                 onChange={(e) => set("eventId", e.target.value)}
+                                required
                                 className={`mt-1 w-full rounded-xl border bg-white px-3 py-2 outline-none focus:ring-2 ${errors.eventId ? "border-rose-300 focus:ring-rose-200" : "border-slate-300 focus:ring-emerald-200"
                                     }`}
                             >
                                 <option value="">Seçiniz…</option>
                                 {events.map((ev) => (
                                     <option key={ev.id} value={ev.id}>
-                                        {ev.title}
+                                        {ev.title} — {ev.date}
                                     </option>
                                 ))}
                             </select>
                             {errors.eventId && <p className="mt-1 text-xs text-rose-600">{errors.eventId}</p>}
+                            {selectedEvent && (
+                                <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-slate-500">
+                                    <div className="flex items-center gap-1">
+                                        <Calendar className="h-4 w-4" />
+                                        <span>{selectedEvent.date}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <Clock className="h-4 w-4" />
+                                        <span>{selectedEvent.time}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <MapPin className="h-4 w-4" />
+                                        <span>{selectedEvent.location}</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div>
@@ -190,6 +215,7 @@ const EtkinlikKatilim: React.FC = () => {
                             <select
                                 value={data.participation}
                                 onChange={(e) => set("participation", e.target.value as FormData["participation"])}
+                                required
                                 className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-200"
                             >
                                 <option>Katılımcı</option>

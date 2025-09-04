@@ -13,6 +13,8 @@ import { events } from "./data/events";
 import Stats from "./Stats";
 
 import EtkinlikTakvim from "./pages/EtkinlikTakvim";
+import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
 import EtkinlikKatilim from "./pages/EtkinlikKatilim";
 import Search from "./pages/Search";
 import Unilife from "./pages/Unilife";
@@ -96,6 +98,8 @@ const App: React.FC = () => {
         <Route path="/search" element={<Search />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
         <Route path="/etkinlik-katilim" element={<EtkinlikKatilim />} />
+        <Route path="/etkinlik/:id" element={<EventDetail />} />
+        <Route path="/etkinlikler" element={<Events />} />
       </Route>
     </Routes>
   );

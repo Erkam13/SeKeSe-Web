@@ -79,17 +79,6 @@ const EventCard: React.FC<EventCardProps> = ({
                         <span>{location}</span>
                     </li>
                 </ul>
-
-                {href && (
-                    <div className="pt-2">
-                        <span
-                            aria-hidden="true"
-                            className="inline-flex items-center justify-center rounded-xl bg-emerald-600 text-white font-semibold px-4 py-2.5 shadow-sm pointer-events-none"
-                        >
-                            Detaylı Bilgi
-                        </span>
-                    </div>
-                )}
             </div>
         </article>
     );
