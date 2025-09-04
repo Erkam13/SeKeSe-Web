@@ -58,8 +58,12 @@ const Home: React.FC = () => {
         </div>
         <div className="mx-auto max-w-7xl px-6 pb-10 pt-6 grid gap-8 lg:gap-10 justify-items-center
                 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {events.map((e, i) => (
-            <EventCard key={i} {...e} />
+          {events.map((e) => (
+            <EventCard
+              key={e.id || e.title}
+              {...e}
+              href={e.id ? `/etkinlik/${e.id}` : undefined}
+            />
           ))}
         </div>
       </section>
