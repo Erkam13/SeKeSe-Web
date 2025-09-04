@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import events from "../data/events";
 
 type FormData = {
@@ -31,15 +31,25 @@ const EtkinlikKatilim: React.FC = () => {
     const [loading, setLoading] = React.useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
 
     React.useEffect(() => {
         if (sent === "ok") {
-            const t = setTimeout(() => {
-                navigate("/");
-            }, 5000);
+            const t = setTimeout(() => navigate("/"), 5000);
             return () => clearTimeout(t);
         }
     }, [sent, navigate]);
+
+    React.useEffect(() => {
+        const fromState = (location.state as any)?.eventId as string | undefined;
+        const fromQuery = searchParams.get("eventId") || undefined;
+        const incoming = fromState || fromQuery;
+        if (incoming && !data.eventId) {
+            set("eventId", incoming as any);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.state, searchParams]);
 
     const set = <K extends keyof FormData>(k: K, v: FormData[K]) =>
         setData((s) => ({ ...s, [k]: v }));
@@ -142,7 +152,7 @@ const EtkinlikKatilim: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* E-posta */}
+                    {/* E‑posta */}
                     <div>
                         <label className="block text-sm font-medium text-slate-700">E‑posta</label>
                         <input

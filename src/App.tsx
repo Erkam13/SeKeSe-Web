@@ -96,7 +96,6 @@ const App: React.FC = () => {
         <Route path="/search" element={<Search />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
         <Route path="/etkinlik-katilim" element={<EtkinlikKatilim />} />
-        <Route path="*" element={<div className="p-6">Sayfa bulunamadı</div>} />
       </Route>
     </Routes>
   );
