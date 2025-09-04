@@ -79,7 +79,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
             </footer>
         </article>
     );
-
+    s
     // Link ile sarmala (varsa)
     return to ? (
         <Link
