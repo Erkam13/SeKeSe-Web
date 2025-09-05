@@ -1,3 +1,5 @@
+import EventCard from "../EventCard";
+import { events } from "../data/events";
 import React from "react";
 import AddEventModal from "../AddEventModal";
 
@@ -10,6 +12,9 @@ type CalendarEvent = {
     date: string;   // ISO: "2025-10-07"
     type: EventType;
     time?: string;  // "14:00" gibi - opsiyonel
+    image?: string;
+    description?: string;
+    location?: string;
 };
 
 type DayCell = {
@@ -326,6 +331,33 @@ const EtkinlikTakvim: React.FC = () => {
                 onClose={() => setIsModalOpen(false)}
                 onSave={addEventManual}
             />
+            {/* Etkinlikler listesi */}
+            <section className="bg-gray-50/60 mt-12 rounded-2xl">
+                <div className="mx-auto max-w-7xl px-6 pt-10">
+                    <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+                        Etkinlikler
+                    </h1>
+                </div>
+
+                <div
+                    className="mx-auto max-w-7xl px-6 pb-12 pt-6 grid gap-8 lg:gap-10 justify-items-center
+                  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                >
+                    {events.map((e) => (
+                        <EventCard
+                            key={e.id}
+                            image={e.image ?? ""}
+                            title={e.title}
+                            description={e.description ?? ""}
+                            date={e.date}
+                            time={e.time ?? ""}
+                            location={e.location ?? ""}
+                            type={e.type}
+                            href={`/etkinlik/${e.id}`}
+                        />
+                    ))}
+                </div>
+            </section>
         </div>
     );
 };

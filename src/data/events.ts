@@ -20,5 +20,25 @@ export const events = [
         description: "Üsküdar Üniversitesi mezuniyet törenleri.",
         type: "Yüz Yüze Etkinlik",
     },
+    {
+        id: "event-3",
+        image: "https://picsum.photos/400/200?1",
+        title: "Yapay Zeka ve Geleceğin Teknolojileri Semineri",
+        date: "25.11.2025 / Salı",
+        time: "14:00 - 16:00",
+        location: "Online (Zoom)",
+        description: "Yapay zeka ve geleceğin teknolojileri üzerine seminer.",
+        type: "Çevrimiçi Etkinlik",
+    },
+    {
+        id: "event-4",
+        image: "https://picsum.photos/400/200?4",
+        title: "Uluslararası Öğrenci Buluşması",
+        date: "15.09.2025 / Pazartesi",
+        time: "18:00 - 21:00",
+        location: "Yeditepe Üniversitesi Kampüsü",
+        description: "Uluslararası öğrenciler için tanışma ve kaynaşma etkinliği.",
+        type: "Yüz Yüze Etkinlik",
+    },
 ];
 export default events;
