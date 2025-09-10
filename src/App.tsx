@@ -12,6 +12,11 @@ import { slides } from "./data/slides";
 import { events } from "./data/events";
 import Stats from "./Stats";
 
+import Kilavuzlar from "./pages/Kilavuzlar";
+import SporTesisleri from "./pages/SporTesisleri";
+import ClubDetail from "./pages/ClubDetail";
+import Contact from "./pages/Contact";
+import DuyuruDetail from "./pages/DuyuruDetail";
 import EtkinlikTakvim from "./pages/EtkinlikTakvim";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
@@ -92,10 +97,13 @@ const App: React.FC = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/kulup/:id" element={<ClubDetail />} />
         <Route path="/etkinlik-takvim" element={<EtkinlikTakvim />} />
+        <Route path="/iletisim" element={<Contact />} />
         <Route path="/yemek-menusu" element={<YemekMenusu />} />
         <Route path="/ring-saatleri" element={<Rings />} />
         <Route path="/duyurular" element={<Duyurular />} />
+        <Route path="/duyurular/:slug" element={<DuyuruDetail />} />
         <Route path="/kulupler" element={<Kulupler />} />
         <Route path="/blog" element={<Bloglar />} />
         <Route path="/unilife" element={<Unilife />} />
@@ -104,6 +112,12 @@ const App: React.FC = () => {
         <Route path="/etkinlik-katilim" element={<EtkinlikKatilim />} />
         <Route path="/etkinlik/:id" element={<EventDetail />} />
         <Route path="/etkinlikler" element={<Events />} />
+        <Route path="/kilavuzlar" element={<Kilavuzlar />} />
+        <Route path="/spor-tesisleri" element={<SporTesisleri />} />
+        <Route path="*" element={<div className="p-6">Sayfa bulunamadı.</div>} />
+      </Route>
+      <Route path="/admin/*" element={<div className="p-6">Admin Panel (geliştiriliyor...)</div>}>
+
       </Route>
     </Routes>
   );

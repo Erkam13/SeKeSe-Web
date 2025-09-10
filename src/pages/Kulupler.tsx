@@ -3,74 +3,18 @@ import { Link } from "react-router-dom";
 import {
     Users2,
     Calendar,
-    Plus,
     RotateCcw,
     ChevronLeft,
     ChevronRight,
     Search,
     FileText,
-    FileDown
+    FileDown,
+    Book
 } from "lucide-react";
+import { clubs as clubData, type ClubDetail, type CatKey, catLabel } from "../data/clubs";
 
-/* ===================== Types ===================== */
-type CatKey = "teknoloji" | "kultur-sanat" | "sosyal" | "spor" | "akademik";
-
-type Club = {
-    id: string;
-    name: string;
-    members: number;
-    events: number;
-    category: CatKey;
-    faculty: string;
-    instagram?: string;
-};
-
-/* ===================== Demo Data ===================== */
-
-// Başlangıç listesi (sen burayı API’den doldurabilirsin)
-const seed: Club[] = [
-    { id: crypto.randomUUID(), name: "Yapay Zeka ve Teknoloji Kulübü", members: 380, events: 42, category: "teknoloji", faculty: "Mühendislik ve Doğa Bilimleri", instagram: "https://instagram.com/ai_club" },
-    { id: crypto.randomUUID(), name: "IEEE Öğrenci Kolu", members: 520, events: 58, category: "teknoloji", faculty: "Mühendislik ve Doğa Bilimleri", instagram: "https://instagram.com/ieee_uu" },
-    { id: crypto.randomUUID(), name: "Tiyatro Kulübü", members: 210, events: 26, category: "kultur-sanat", faculty: "İletişim Fakültesi" },
-    { id: crypto.randomUUID(), name: "Müzik Kulübü", members: 340, events: 31, category: "kultur-sanat", faculty: "İletişim Fakültesi" },
-    { id: crypto.randomUUID(), name: "Girişimcilik ve İnovasyon Kulübü", members: 460, events: 37, category: "akademik", faculty: "İnsan ve Toplum Bilimleri" },
-    { id: crypto.randomUUID(), name: "Sosyal Sorumluluk Kulübü", members: 780, events: 102, category: "sosyal", faculty: "İnsan ve Toplum Bilimleri", instagram: "https://instagram.com/sskulup" },
-    { id: crypto.randomUUID(), name: "Spor ve Sağlıklı Yaşam Kulübü", members: 290, events: 44, category: "spor", faculty: "Sağlık Bilimleri Fakültesi" },
-    { id: crypto.randomUUID(), name: "Psikoloji Kulübü", members: 640, events: 49, category: "akademik", faculty: "İnsan ve Toplum Bilimleri" },
-    { id: crypto.randomUUID(), name: "Sinema Kulübü", members: 230, events: 20, category: "kultur-sanat", faculty: "İletişim Fakültesi" },
-    { id: crypto.randomUUID(), name: "Robotik ve Otomasyon Kulübü", members: 410, events: 33, category: "teknoloji", faculty: "Mühendislik ve Doğa Bilimleri" },
-    { id: crypto.randomUUID(), name: "Uluslararası Öğrenciler Kulübü", members: 520, events: 61, category: "sosyal", faculty: "İletişim Fakültesi" },
-    { id: crypto.randomUUID(), name: "Doğa ve Çevre Kulübü", members: 275, events: 27, category: "sosyal", faculty: "Mühendislik ve Doğa Bilimleri" },
-];
-
-// 42+ öğeye tamamla (sadece demo)
-const rnd = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-const nameA = ["Genç", "İleri", "Yaratıcı", "Akıllı", "Dinamik", "Sürdürülebilir", "Dijital", "İnovatif", "Bilim", "Kültür", "Anadolu", "Medeniyet", "Gökbilim", "Sağlık", "Tasarım", "Veri", "Enerji", "Siber", "Matematik", "Doğa"];
-const nameB = ["Teknoloji", "Topluluk", "Vizyon", "Atölye", "Platform", "Gelişim", "Çember", "Akademi", "Ekip", "Kolektif", "Kulübü"];
-const cats: CatKey[] = ["teknoloji", "kultur-sanat", "sosyal", "spor", "akademik"];
-const facs = ["Mühendislik ve Doğa Bilimleri", "İletişim Fakültesi", "İnsan ve Toplum Bilimleri", "Sağlık Bilimleri Fakültesi"];
-
-while (seed.length < 42) {
-    const nm = `${nameA[rnd(0, nameA.length - 1)]} ${nameB[rnd(0, nameB.length - 1)]} ${rnd(10, 99)} Kulübü`;
-    seed.push({
-        id: crypto.randomUUID(),
-        name: nm,
-        members: rnd(120, 1000),
-        events: rnd(6, 80),
-        category: cats[rnd(0, cats.length - 1)],
-        faculty: facs[rnd(0, facs.length - 1)],
-    });
-}
 
 /* ===================== Helpers ===================== */
-const catLabel: Record<CatKey, string> = {
-    teknoloji: "Teknoloji",
-    "kultur-sanat": "Kültür-Sanat",
-    sosyal: "Sosyal Sorumluluk",
-    spor: "Spor",
-    akademik: "Akademik",
-};
-
 const catBadge: Record<CatKey, string> = {
     teknoloji: "bg-emerald-100/70 text-emerald-800 ring-emerald-200",
     "kultur-sanat": "bg-violet-100/70 text-violet-800 ring-violet-200",
@@ -102,7 +46,7 @@ const forms: { id: string; title: string; href: string }[] = [
 
 /* ===================== Component ===================== */
 const Kulupler: React.FC = () => {
-    const [all, setAll] = React.useState<Club[]>(seed);
+    const all: ClubDetail[] = clubData;
 
     // filtre durumları
     const [q, setQ] = React.useState("");
@@ -175,20 +119,6 @@ const Kulupler: React.FC = () => {
         setPage(1);
     };
 
-    const addRandom = () => {
-        const nm = `${nameA[rnd(0, nameA.length - 1)]} ${nameB[rnd(0, nameB.length - 1)]} Kulübü`;
-        setAll((prev) => [
-            ...prev,
-            {
-                id: crypto.randomUUID(),
-                name: nm,
-                members: rnd(100, 1000),
-                events: rnd(5, 80),
-                category: cats[rnd(0, cats.length - 1)],
-                faculty: facs[rnd(0, facs.length - 1)],
-            },
-        ]);
-    };
 
     const membersSum = filtered.reduce((s, c) => s + c.members, 0);
     const eventsSum = filtered.reduce((s, c) => s + c.events, 0);
@@ -206,12 +136,13 @@ const Kulupler: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <button
+                        <a
+                            href="#forms"
                             className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700 transition shadow"
-                            title="Örnek kulüp ekle"
+                            title="Aşağıdaki formlara git"
                         >
-                            <Plus className="h-4 w-4" /> Örnek Ekle
-                        </button>
+                            <Book className="h-4 w-4" /> Formlar
+                        </a>
                     </div>
                 </div>
 
@@ -403,9 +334,13 @@ const Kulupler: React.FC = () => {
                                         Instagram
                                     </a>
                                 )}
-                                <button className="text-[12px] font-semibold text-emerald-700 ring-1 ring-slate-200 rounded-lg px-2.5 py-1 hover:bg-emerald-50">
+                                <Link
+                                    to={`/kulup/${c.id}`}
+                                    className="text-[12px] font-semibold text-emerald-700 ring-1 ring-slate-200 rounded-lg px-2.5 py-1 hover:bg-emerald-50"
+                                    title="Kulüp detay"
+                                >
                                     Detay
-                                </button>
+                                </Link>
                             </div>
                         </article>
                     ))
@@ -431,7 +366,7 @@ const Kulupler: React.FC = () => {
             </div>
 
             {/* Hızlı Formlar */}
-            <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 md:p-5">
+            <section id="forms" className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 md:p-5">
                 <div className="mb-3 flex items-center justify-between">
                     <h2 className="text-lg md:text-xl font-extrabold tracking-tight text-slate-900">
                         Hızlı Formlar

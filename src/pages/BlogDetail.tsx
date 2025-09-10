@@ -51,8 +51,8 @@ const BlogDetail: React.FC = () => {
             </div>
 
             {/* Görsel */}
-            <div className="max-w-4xl mx-auto px-6 mt-6">
-                <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl bg-slate-100">
+            <div className="max-w-xl mx-auto px-6 mt-6">
+                <div className="aspect-[16/9]  w-full overflow-hidden rounded-xl bg-slate-100">
                     <img
                         src={post.image}
                         alt={post.title}

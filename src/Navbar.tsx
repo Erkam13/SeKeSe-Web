@@ -7,12 +7,12 @@ type Item = { label: string; href: string };
 
 const primary: Item[] = [
     { label: "SKS UniLife", href: "/unilife" },
-    { label: "SKS Blog", href: "/blog" },
+    { label: "Duyurular", href: "/duyurular" },
     { label: "Kulüpler", href: "/kulupler" },
     { label: "Etkinlik Takvimi", href: "/etkinlik-takvim" },
     { label: "Yemek Listesi", href: "/yemek-menusu" },
     { label: "Servis Saatleri", href: "/ring-saatleri" },
-    { label: "Duyurular", href: "/duyurular" },
+    { label: "SKS Blog", href: "/blog" },
     { label: "İletişim", href: "/iletisim" },
 ];
 
